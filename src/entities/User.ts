@@ -16,7 +16,7 @@ export class User extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column({ unique: true })
+  @Column()
   username!: string;
 
   @Field()
@@ -24,7 +24,7 @@ export class User extends BaseEntity {
   email!: string;
 
   @Column()
-  password!: String;
+  password!: string;
 
   @Field(() => String)
   @CreateDateColumn()
