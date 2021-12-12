@@ -54,7 +54,9 @@ export class UserResolver {
 
     if (existedUser) {
       throw new UserInputError("Email has already been taken", {
-        email: "Email has already been taken",
+        errors: {
+          email: "Email has already been taken",
+        },
       });
     }
 
@@ -93,8 +95,10 @@ export class UserResolver {
 
     if (!existedUser) {
       throw new UserInputError("Invalid email or password", {
-        email: "Invalid email",
-        password: "Invalid password",
+        errors: {
+          email: "Invalid email",
+          password: "Invalid password",
+        },
       });
     }
 
@@ -105,8 +109,10 @@ export class UserResolver {
 
     if (!isPasswordValidated) {
       throw new UserInputError("Invalid email or password", {
-        email: "Invalid email",
-        password: "Invalid password",
+        errors: {
+          email: "Invalid email",
+          password: "Invalid password",
+        },
       });
     }
 
