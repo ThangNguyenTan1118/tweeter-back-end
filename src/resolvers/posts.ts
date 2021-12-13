@@ -30,9 +30,20 @@ export class PostResolver {
   @Query(() => [Post])
   async posts() {
     const posts = await Post.find({
-      relations: ["user"],
+      relations: ["user", "comments"],
     });
     return posts;
+  }
+
+  @Query(() => [Post])
+  async post(@Arg("postId") postId: number) {
+    const post = await Post.findOne({
+      relations: ["user", "comments"],
+      where: {
+        id: postId,
+      },
+    });
+    return post;
   }
 
   @Mutation(() => Post)

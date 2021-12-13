@@ -7,8 +7,10 @@ import {
   Column,
   BaseEntity,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
+import { Comment } from "./Comment";
 
 @ObjectType()
 @Entity()
@@ -40,4 +42,8 @@ export class Post extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
   user: User;
+
+  @Field(() => [Comment])
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 }

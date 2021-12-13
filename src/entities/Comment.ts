@@ -6,28 +6,23 @@ import {
   UpdateDateColumn,
   Column,
   BaseEntity,
-  OneToMany,
+  ManyToOne,
 } from "typeorm";
-import { Comment } from "./Comment";
 import { Post } from "./Post";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+export class Comment extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
-  @Column()
-  username!: string;
-
-  @Field()
-  @Column({ unique: true })
-  email!: string;
-
-  @Column()
-  password!: string;
+  @Column({
+    type: "text",
+  })
+  content!: string;
 
   @Field(() => String)
   @CreateDateColumn()
@@ -37,9 +32,10 @@ export class User extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.comments)
+  user: User;
 
-  @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
+  @ManyToOne(() => Post, (post) => post.comments)
+  post: Post;
 }
