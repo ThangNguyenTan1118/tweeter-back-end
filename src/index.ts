@@ -7,7 +7,17 @@ import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { HelloResolver } from "./resolvers/hello";
 import { User } from "./entities/User";
+import { Post } from "./entities/Post";
 import { UserResolver } from "./resolvers/users";
+import { PostResolver } from "./resolvers/posts";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user: User;
+    }
+  }
+}
 
 const main = async () => {
   await createConnection({
@@ -15,14 +25,14 @@ const main = async () => {
     url: process.env.DATABASE_URL,
     logging: true,
     synchronize: true,
-    entities: [User],
+    entities: [User, Post],
   });
 
   const app = express();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver],
+      resolvers: [HelloResolver, UserResolver, PostResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({

@@ -75,6 +75,8 @@ export class UserResolver {
         id: user.id,
         username: user.username,
         email: user.email,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
       process.env.JWT_SECRECT
     );
@@ -121,6 +123,8 @@ export class UserResolver {
         id: existedUser.id,
         username: existedUser.username,
         email: existedUser.email,
+        createdAt: existedUser.createdAt,
+        updatedAt: existedUser.updatedAt,
       },
       process.env.JWT_SECRECT
     );
