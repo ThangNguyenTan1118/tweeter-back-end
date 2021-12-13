@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Comment } from "./Comment";
 import { Post } from "./Post";
+import { Vote } from "./Vote";
 
 @ObjectType()
 @Entity()
@@ -42,4 +43,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 }

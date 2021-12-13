@@ -12,6 +12,8 @@ import { UserResolver } from "./resolvers/users";
 import { PostResolver } from "./resolvers/posts";
 import { Comment } from "./entities/Comment";
 import { CommentResolver } from "./resolvers/comments";
+import { Vote } from "./entities/Vote";
+import { VoteResolver } from "./resolvers/votes";
 
 declare global {
   namespace Express {
@@ -27,14 +29,20 @@ const main = async () => {
     url: process.env.DATABASE_URL,
     logging: true,
     synchronize: true,
-    entities: [User, Post, Comment],
+    entities: [User, Post, Comment, Vote],
   });
 
   const app = express();
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver, PostResolver, CommentResolver],
+      resolvers: [
+        HelloResolver,
+        UserResolver,
+        PostResolver,
+        CommentResolver,
+        VoteResolver,
+      ],
       validate: false,
     }),
     context: ({ req, res }) => ({

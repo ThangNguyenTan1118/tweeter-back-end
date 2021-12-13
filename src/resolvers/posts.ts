@@ -8,10 +8,14 @@ import {
   UseMiddleware,
   InputType,
   Field,
+  Root,
+  FieldResolver,
+  Int,
 } from "type-graphql";
 import { Post } from "../entities/Post";
 import { MyContext } from "../types";
 import { UserInputError, ForbiddenError } from "apollo-server-express";
+import { Vote } from "../entities/Vote";
 
 @InputType()
 export class PostContentInput {
@@ -25,12 +29,24 @@ export class PostContentInput {
   imageURL!: string;
 }
 
-@Resolver()
+@Resolver((_of) => Post)
 export class PostResolver {
+  @FieldResolver(() => Int)
+  async totalLikes(@Root() post: Post) {
+    const likeCount = await Vote.count({
+      relations: ["user"],
+      where: {
+        id: post.id,
+      },
+    });
+
+    return likeCount;
+  }
+
   @Query(() => [Post])
   async posts() {
     const posts = await Post.find({
-      relations: ["user", "comments"],
+      relations: ["user", "comments", "votes"],
     });
     return posts;
   }
@@ -38,7 +54,7 @@ export class PostResolver {
   @Query(() => [Post])
   async post(@Arg("postId") postId: number) {
     const post = await Post.findOne({
-      relations: ["user", "comments"],
+      relations: ["user", "comments", "votes"],
       where: {
         id: postId,
       },
@@ -111,7 +127,7 @@ export class PostResolver {
       throw new ForbiddenError("You don't have permission to delete this post");
     }
 
-    await Post.delete(post);
+    await Post.delete(post.id);
 
     return post;
   }

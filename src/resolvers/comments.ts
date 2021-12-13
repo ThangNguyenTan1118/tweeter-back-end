@@ -1,7 +1,6 @@
 import { isAuth } from "../middlewares/jwtAuth";
 import {
   Resolver,
-  Query,
   Mutation,
   Arg,
   Ctx,
@@ -41,25 +40,6 @@ export class CommentResolver {
     });
 
     return user;
-  }
-
-  @Query(() => [Comment])
-  async comments() {
-    const comments = await Comment.find({
-      relations: ["user"],
-    });
-    return comments;
-  }
-
-  @Query(() => [Comment])
-  async comment(@Arg("commentId") commentId: number) {
-    const comment = await Comment.findOne({
-      relations: ["user"],
-      where: {
-        id: commentId,
-      },
-    });
-    return comment;
   }
 
   @Mutation(() => Comment)
@@ -141,7 +121,7 @@ export class CommentResolver {
       );
     }
 
-    await Comment.delete(comment);
+    await Comment.delete(comment.id);
 
     return comment;
   }
