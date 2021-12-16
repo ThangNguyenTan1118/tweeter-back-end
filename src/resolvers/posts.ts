@@ -36,7 +36,7 @@ export class PostResolver {
     const likeCount = await Vote.count({
       relations: ["user"],
       where: {
-        id: post.id,
+        post: post.id,
       },
     });
 
